@@ -1,13 +1,13 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 
-import HomePage from "./pages/Home";
+import Scheduling from "./pages/Scheduling";
 
 function App() {
   return (
     <BrowserRouter>
-      <main>
+      <main className="flex flex-col w-full h-full">
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/agendamentos" element={<Scheduling />} />
           <Route path="*" element={<h1>404 - Página não encontrada</h1>} />
         </Routes>
       </main>
