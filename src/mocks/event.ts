@@ -1,0 +1,42 @@
+export const MOCK_EVENTS = [
+  {
+    id: 1,
+    title: "Evento 1",
+    status: 3,
+    date: "2026-02-01",
+    time: "10:00",
+    client: 1,
+  },
+  {
+    id: 2,
+    title: "Evento 2",
+    status: 3,
+    date: "2026-02-02",
+    time: "14:30",
+    client: 2,
+  },
+  {
+    id: 3,
+    title: "Evento 3",
+    status: 2,
+    date: "2026-02-03",
+    time: "16:00",
+    client: 3,
+  },
+  {
+    id: 4,
+    title: "Evento 4",
+    status: 1,
+    date: "2026-02-03",
+    time: "09:00",
+    client: 4,
+  },
+  {
+    id: 5,
+    title: "Evento 5",
+    status: 1,
+    date: "2026-02-05",
+    time: "11:30",
+    client: 5,
+  },
+];
