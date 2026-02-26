@@ -1,14 +1,17 @@
-import { Button } from "./components/ui/button";
+import { BrowserRouter, Route, Routes } from "react-router";
+
+import HomePage from "./pages/Home";
 
 function App() {
   return (
-    <>
-      <div className="flex min-h-svh flex-col items-center justify-center">
-        <Button className="bg-blue-500 text-white">
-          Teste shadcn com tailwindcss
-        </Button>
-      </div>
-    </>
+    <BrowserRouter>
+      <main>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="*" element={<h1>404 - Página não encontrada</h1>} />
+        </Routes>
+      </main>
+    </BrowserRouter>
   );
 }
 
