@@ -1,0 +1,42 @@
+export const MOCK_CLIENTS = [
+  {
+    id: 1,
+    name: "João Silva",
+    birth: "1990-05-15",
+    phone: "11987654321",
+    email: "joao.silva@email.com",
+    gender: 1,
+  },
+  {
+    id: 2,
+    name: "Maria Oliveira",
+    birth: "1985-10-20",
+    phone: "11912345678",
+    email: "maria.oliveira@email.com",
+    gender: 2,
+  },
+  {
+    id: 3,
+    name: "Carlos Souza",
+    birth: "1992-03-10",
+    phone: "11987654321",
+    email: "carlos.souza@email.com",
+    gender: 1,
+  },
+  {
+    id: 4,
+    name: "Ana Pereira",
+    birth: "1988-07-25",
+    phone: "11912345678",
+    email: "ana.pereira@email.com",
+    gender: 2,
+  },
+  {
+    id: 5,
+    name: "Lucas Santos",
+    birth: "1995-12-05",
+    phone: "11987654321",
+    email: "lucas.santos@email.com",
+    gender: 1,
+  },
+];
