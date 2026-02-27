@@ -24,7 +24,6 @@ const Sidebar = () => {
             <div className="text-sm font-semibold text-foreground/70 mb-2">
               Gerenciamento
             </div>
-            <hr />
           </div>
           <ItemSideBar
             icon={<Calendar size={16} />}
@@ -35,26 +34,32 @@ const Sidebar = () => {
         <div>
           <div className="flex flex-col mb-2">
             <div className="text-sm font-semibold text-foreground/70 mb-2">
-              Cadastros
+              Acompanhamento
             </div>
-            <hr />
           </div>
           <ItemSideBar
             icon={<CalendarClock size={16} />}
-            label="Eventos"
-            redirectPath="/eventos"
+            label="Histórico de Eventos"
+            redirectPath="/historico"
           />
+        </div>
+        <div>
+          <div className="flex flex-col mb-2">
+            <div className="text-sm font-semibold text-foreground/70 mb-2">
+              Cadastros
+            </div>
+          </div>
           <ItemSideBar
             icon={<UserPlus size={16} />}
             label="Clientes"
             redirectPath="/clientes"
           />
-          <ItemSideBar
-            icon={<Clock size={16} />}
-            label="Funcionamento"
-            redirectPath="/funcionamento"
-          />
         </div>
+        <ItemSideBar
+          icon={<Clock size={16} />}
+          label="Funcionamento"
+          redirectPath="/funcionamento"
+        />
       </div>
     </div>
   );
