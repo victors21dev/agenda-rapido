@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import { ThemeProvider } from "./components/layout/ThemeProvider";
 import BusinessHoursPage from "./pages/BusinessHours";
 import ClientsPage from "./pages/Clients";
+import DashboardPage from "./pages/Dashboard";
 import EventsPage from "./pages/History";
 import Scheduling from "./pages/Scheduling";
 
@@ -12,6 +13,7 @@ function App() {
       <BrowserRouter>
         <main className="flex bg-background flex-col w-full h-full text-foreground poppins-regular">
           <Routes>
+            <Route path="/" element={<DashboardPage />} />
             <Route path="/agendamentos" element={<Scheduling />} />
             <Route path="/historico" element={<EventsPage />} />
             <Route path="/clientes" element={<ClientsPage />} />

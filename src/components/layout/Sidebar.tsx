@@ -27,6 +27,11 @@ const Sidebar = () => {
           </div>
           <ItemSideBar
             icon={<Calendar size={16} />}
+            label="Dashboard"
+            redirectPath="/"
+          />
+          <ItemSideBar
+            icon={<Calendar size={16} />}
             label="Agendamentos"
             redirectPath="/agendamentos"
           />
