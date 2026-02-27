@@ -69,7 +69,7 @@ const EventsPage = () => {
   };
   // Filtra os eventos para mostrar apenas os que estão "Agendados" (3)
   const filteredAndSortedData = data
-    .filter((event) => event.status === 1)
+    .filter((event) => event.status === 3)
     .sort((a, b) => {
       // Compara as datas
       const dateCompare = a.date.localeCompare(b.date);
