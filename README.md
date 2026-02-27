@@ -1,73 +1,74 @@
-# React + TypeScript + Vite
+# 📅 Agenda Rápido
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+O **Agenda Rápido** é uma plataforma moderna de gerenciamento de agendamentos e clientes, desenvolvida para oferecer uma experiência fluida e intuitiva tanto para prestadores de serviço quanto para usuários finais.
 
-Currently, two official plugins are available:
+## 🚀 Tecnologias e Ferramentas
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+O projeto foi construído utilizando as versões mais recentes das melhores ferramentas do ecossistema Frontend:
 
-## React Compiler
+### Core
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+- **React 19**: Aproveitando as melhorias de performance e novos hooks.
+- **TypeScript 5.9**: Tipagem estrita para maior segurança e produtividade.
+- **Vite 7**: Build tool de última geração com suporte a SWC.
+- **React Router Dom 7**: Gerenciamento de rotas e navegação SPA.
 
-## Expanding the ESLint configuration
+### Estilização e UI
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Tailwind CSS 4**: Estilização baseada em utilitários com a nova engine v4.
+- **Radix UI**: Componentes primitivos acessíveis e sem estilização forçada.
+- **Shadcn/UI**: Componentes de interface reutilizáveis e customizáveis.
+- **Motion**: Animações fluidas e declarativas.
+- **Lucide React**: Biblioteca de ícones moderna e leve.
 
-```js
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
+### Gestão de Dados e Gráficos
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **TanStack Table v8**: Tabelas poderosas com suporte a filtros, ordenação e paginação.
+- **Recharts 3**: Visualização de dados dinâmica para o Dashboard.
+- **UUID**: Geração de identificadores únicos para clientes e eventos.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🛠️ Configurações de Código
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
+O projeto possui um fluxo de trabalho otimizado para manter a organização e padronização do código:
 
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs["recommended-typescript"],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+- **Import Sorting**: Organização automática de imports via `@trivago/prettier-plugin-sort-imports` e `prettier-plugin-organize-imports`.
+- **Tailwind Organizing**: As classes do Tailwind são automaticamente ordenadas para melhor leitura.
+- **ESLint 9**: Verificação rigorosa de padrões de código e boas práticas de hooks.
+
+---
+
+## 🏃 Como Rodar o Projeto
+
+### Pré-requisitos
+
+- Node.js (versão recomendada v20 ou superior)
+- npm ou yarn
+
+### Instalação
+
+1. Clone o repositório:
+
+   ```bash
+   git clone [https://github.com/victors21dev/agenda-rapido](https://github.com/victors21dev/agenda-rapido)
+   ```
+
+2. Entre na pasta::
+
+   ```bash
+   cd agenda-rapido
+   ```
+
+3. Instale as dependências:
+   ```bash
+   npm install
+   ```
+
+## 🏃 Funcionalidades Atuais
+
+[x] Dashboard com métricas semanais e volume de atendimentos.
+[x] Gerenciamento completo de Clientes (CRUD).
+[x] Agendamento de serviços com validação de horários de funcionamento.
+[x] Filtros de pesquisa em tempo real.
+[x] Persistência de dados via LocalStorage.
