@@ -5,15 +5,49 @@ import { MOCK_HOURS_OPEN_CLOSE } from "@/mocks/time-list-open-close";
 import Header from "@/components/layout/Header";
 import LayoutDefaultDesktop from "@/components/layout/LayoutDefaultDesktop";
 import LoadingWarning from "@/components/layout/LoadingWarning";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 const BusinessHoursPage = () => {
-  // Estado com os dados do mock
   const [hours, setHours] = useState<typeof MOCK_HOURS_OPEN_CLOSE>([]);
   const [loading, setLoading] = useState(true);
 
-  // Atualizar horário
+  // Carregamento Inicial: Busca os horários do localStorage ou usa o Mock
+  useEffect(() => {
+    const fetchHours = () => {
+      setLoading(true);
+      setTimeout(() => {
+        try {
+          const savedHours = localStorage.getItem("business_hours");
+
+          if (savedHours) {
+            setHours(JSON.parse(savedHours));
+          } else {
+            // Se não houver nada salvo, inicia com o Mock
+            setHours(MOCK_HOURS_OPEN_CLOSE);
+            localStorage.setItem(
+              "business_hours",
+              JSON.stringify(MOCK_HOURS_OPEN_CLOSE),
+            );
+          }
+        } catch (error) {
+          console.error("Erro ao carregar horários:", error);
+        } finally {
+          setLoading(false);
+        }
+      }, 800);
+    };
+
+    fetchHours();
+  }, []);
+
+  // Persistência Automática: Salva sempre que 'hours' mudar
+  useEffect(() => {
+    if (!loading && hours.length > 0) {
+      localStorage.setItem("business_hours", JSON.stringify(hours));
+    }
+  }, [hours, loading]);
+
+  // Manipulação de Horários: Atualiza o estado quando o usuário altera um horário
   const handleTimeChange = (
     id: number,
     field: "open" | "close",
@@ -25,25 +59,6 @@ const BusinessHoursPage = () => {
       ),
     );
   };
-
-  useEffect(() => {
-    const fetchHours = () => {
-      setLoading(true);
-
-      // Simula o tempo de resposta do servidor
-      setTimeout(() => {
-        try {
-          setHours(MOCK_HOURS_OPEN_CLOSE);
-        } catch (error) {
-          console.error("Erro ao carregar horários:", error);
-        } finally {
-          setLoading(false);
-        }
-      }, 800);
-    };
-
-    fetchHours();
-  }, []);
 
   return (
     <LayoutDefaultDesktop>
@@ -93,13 +108,6 @@ const BusinessHoursPage = () => {
                 />
               </div>
             ))}
-
-            <Button
-              onClick={() => console.log("Dados salvos:", hours)}
-              className="mt-4 w-fit"
-            >
-              Salvar Horários
-            </Button>
           </>
         )}
       </div>
