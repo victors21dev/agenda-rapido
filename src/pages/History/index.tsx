@@ -16,15 +16,47 @@ const EventsPage = () => {
   // Estado para controle de carregamento (bom para UX de banco de dados)
   const [loading, setLoading] = useState(true);
 
-  // Função para atualizar o status de um evento, que será passada para a tabela via meta
+  // Quando entra na página, ele simula o carregamento dos dados do banco de dados
+  useEffect(() => {
+    const fetchData = () => {
+      setLoading(true);
+
+      setTimeout(() => {
+        try {
+          const savedEvents = localStorage.getItem("events");
+
+          if (savedEvents) {
+            // Se já existem dados
+            setData(JSON.parse(savedEvents));
+          } else {
+            // Se é a primeira vez, buscamos do Mock e salvamos tudo (IDs 1 a 5)
+            // Aqui passamos todos os status [1, 2, 3] para o storage ter a base completa
+            const allEvents = getEnrichedEvents([1, 2, 3]);
+            setData(allEvents);
+            localStorage.setItem("events", JSON.stringify(allEvents));
+          }
+        } catch (error) {
+          console.error("Erro ao carregar dados:", error);
+        } finally {
+          setLoading(false);
+        }
+      }, 1000);
+    };
+
+    fetchData();
+  }, []);
+  // Sempre que os dados mudarem (ex: status atualizado), salvamos no localStorage para persistência
+  useEffect(() => {
+    if (!loading) {
+      localStorage.setItem("events", JSON.stringify(data));
+    }
+  }, [data, loading]);
+  // Função para atualizar o status de um evento (ex: de "Agendado" para "Concluído")
   const updateStatus = (id: number, nextStatus: number) => {
     setData((prevData) => {
-      // Mapeia os dados existentes
-      const updated = prevData.map((event) => {
+      return prevData.map((event) => {
         if (event.id === id) {
-          // Busca o novo nome do status baseado no ID
           const newStatusInfo = DATA_STATUS.find((s) => s.id === nextStatus);
-
           return {
             ...event,
             status: nextStatus,
@@ -33,33 +65,10 @@ const EventsPage = () => {
         }
         return event;
       });
-
-      // Filtra para manter apenas 1 e 2 na página de agendamento
-      return updated.filter(
-        (event) => event.status === 1 || event.status === 2,
-      );
     });
   };
-
-  useEffect(() => {
-    const fetchData = () => {
-      setLoading(true);
-
-      // O setTimeout deve envolver a lógica que define os dados
-      setTimeout(() => {
-        try {
-          const result = getEnrichedEvents([3]);
-          setData(result);
-        } catch (error) {
-          console.error("Erro ao carregar dados:", error);
-        } finally {
-          setLoading(false);
-        }
-      }, 1000); // 1000ms = 1 segundo de "loading"
-    };
-
-    fetchData();
-  }, []);
+  // Filtra os eventos para mostrar apenas os que estão "Agendados" (3)
+  const filteredData = data.filter((event) => event.status === 3);
   return (
     <LayoutDefaultDesktop>
       <div>
@@ -72,7 +81,11 @@ const EventsPage = () => {
         {loading ? (
           <LoadingWarning description="Carregando histórico" />
         ) : (
-          <DataTable columns={columns} data={data} meta={{ updateStatus }} />
+          <DataTable
+            columns={columns}
+            data={filteredData}
+            meta={{ updateStatus }}
+          />
         )}
       </div>
     </LayoutDefaultDesktop>
