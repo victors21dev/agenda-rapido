@@ -6,6 +6,7 @@ export const MOCK_CLIENTS = [
     phone: "11987654321",
     email: "joao.silva@email.com",
     gender: 1,
+    createdAt: "2026-02-10T10:00:00Z",
   },
   {
     id: 2,
@@ -14,6 +15,7 @@ export const MOCK_CLIENTS = [
     phone: "11912345678",
     email: "maria.oliveira@email.com",
     gender: 2,
+    createdAt: "2026-02-10T10:00:00Z",
   },
   {
     id: 3,
@@ -22,6 +24,7 @@ export const MOCK_CLIENTS = [
     phone: "11987654321",
     email: "carlos.souza@email.com",
     gender: 1,
+    createdAt: "2026-02-10T10:00:00Z",
   },
   {
     id: 4,
@@ -30,6 +33,7 @@ export const MOCK_CLIENTS = [
     phone: "11912345678",
     email: "ana.pereira@email.com",
     gender: 2,
+    createdAt: "2026-02-10T10:00:00Z",
   },
   {
     id: 5,
@@ -38,5 +42,6 @@ export const MOCK_CLIENTS = [
     phone: "11987654321",
     email: "lucas.santos@email.com",
     gender: 1,
+    createdAt: "2026-02-10T10:00:00Z",
   },
 ];
