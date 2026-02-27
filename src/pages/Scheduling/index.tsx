@@ -72,9 +72,19 @@ const SchedulingPage = () => {
     });
   };
   // Filtra os eventos para mostrar apenas os que estão "Agendados" (1) ou "Em Andamento" (2)
-  const filteredData = data.filter(
-    (event) => event.status === 1 || event.status === 2,
-  );
+  const filteredAndSortedData = data
+    .filter((event) => event.status === 1 || event.status === 2)
+    .sort((a, b) => {
+      // Compara as datas
+      const dateCompare = a.date.localeCompare(b.date);
+
+      // Se a data for a mesma (0), desempata pelo horário
+      if (dateCompare === 0) {
+        return a.time.localeCompare(b.time);
+      }
+
+      return dateCompare;
+    });
 
   return (
     <LayoutDefaultDesktop>
@@ -121,7 +131,7 @@ const SchedulingPage = () => {
         ) : (
           <DataTable
             columns={columns}
-            data={filteredData}
+            data={filteredAndSortedData}
             meta={{ updateStatus }}
           />
         )}

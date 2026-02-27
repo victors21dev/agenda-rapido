@@ -68,7 +68,19 @@ const EventsPage = () => {
     });
   };
   // Filtra os eventos para mostrar apenas os que estão "Agendados" (3)
-  const filteredData = data.filter((event) => event.status === 3);
+  const filteredAndSortedData = data
+    .filter((event) => event.status === 1)
+    .sort((a, b) => {
+      // Compara as datas
+      const dateCompare = a.date.localeCompare(b.date);
+
+      // Se a data for a mesma (0), desempata pelo horário
+      if (dateCompare === 0) {
+        return a.time.localeCompare(b.time);
+      }
+
+      return dateCompare;
+    });
   return (
     <LayoutDefaultDesktop>
       <div>
@@ -83,7 +95,7 @@ const EventsPage = () => {
         ) : (
           <DataTable
             columns={columns}
-            data={filteredData}
+            data={filteredAndSortedData}
             meta={{ updateStatus }}
           />
         )}
