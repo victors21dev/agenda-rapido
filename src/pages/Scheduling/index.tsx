@@ -2,11 +2,15 @@ import { useEffect, useState } from "react";
 
 import { DATA_STATUS } from "@/data/status";
 import { getEnrichedEvents } from "@/lib/events";
+import { Plus } from "lucide-react";
 
+import AddSchedulingForm from "@/components/layout/AddSchedulingForm";
 import { DataTable } from "@/components/layout/DataTable";
 import Header from "@/components/layout/Header";
 import LayoutDefaultDesktop from "@/components/layout/LayoutDefaultDesktop";
 import LoadingWarning from "@/components/layout/LoadingWarning";
+import Modal from "@/components/layout/Modal";
+import { Button } from "@/components/ui/button";
 
 import { type Events, columns } from "../History/columns";
 
@@ -74,12 +78,43 @@ const SchedulingPage = () => {
 
   return (
     <LayoutDefaultDesktop>
+      {/* O Header é o título e descrição da página */}
       <div>
         <Header
           title="Agendamento"
           description="Página de agendamento de serviços"
         />
       </div>
+      {/* Botão para abrir o modal de criação de novo agendamento */}
+      <div className="flex py-4 justify-end">
+        <Modal
+          trigger={
+            <div className="flex items-center gap-2">
+              <Plus size={18} />
+              Novo Agendamento
+            </div>
+          }
+        >
+          {(close) => (
+            <div className="bg-background p-6 rounded-lg shadow-xl border w-100">
+              <h2 className="text-xl font-bold mb-4">Novo agendamento</h2>
+
+              <AddSchedulingForm
+                onSuccess={(newEvent) => {
+                  setData((prev) => [newEvent, ...prev]);
+                  close();
+                }}
+              />
+
+              <Button variant="ghost" className="w-full mt-2" onClick={close}>
+                Cancelar
+              </Button>
+            </div>
+          )}
+        </Modal>
+      </div>
+      {/* A tabela de dados, que mostra os agendamentos filtrados. Passamos a */}
+      {/* função de updateStatus via meta para ser usada nas ações da tabela */}
       <div className="container mx-auto">
         {loading ? (
           <LoadingWarning description="Carregando agendamentos" />

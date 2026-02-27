@@ -12,11 +12,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 interface TableMeta {
-  updateStatus: (id: number, nextStatus: number) => void;
+  updateStatus: (id: string | number, nextStatus: number) => void;
 }
 
 export type Events = {
-  id: number;
+  id: string | number;
   title: string;
   status: number;
   date: string;
