@@ -1,9 +1,12 @@
+"use client";
+
 import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
 import { DATA_GENDER } from "@/data/gender";
 import { MOCK_CLIENTS } from "@/mocks/clients";
 import { MOCK_HOURS_OPEN_CLOSE } from "@/mocks/time-list-open-close";
-import { Search } from "lucide-react";
+import type { Clients } from "@/pages/Clients/columns";
+import { Lock, Search } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 
 import { Button } from "@/components/ui/button";
@@ -45,6 +48,21 @@ const AddSchedulingForm = ({
   onSuccess,
   initialData,
 }: AddSchedulingFormProps) => {
+  const [clients] = useState<Clients[]>(() => {
+    if (typeof window === "undefined") return MOCK_CLIENTS as Clients[];
+
+    const saved = localStorage.getItem("clients_data");
+    if (saved) {
+      try {
+        return JSON.parse(saved) as Clients[];
+      } catch (error) {
+        console.error("Erro ao converter clientes:", error);
+        return MOCK_CLIENTS as Clients[];
+      }
+    }
+    return MOCK_CLIENTS as Clients[];
+  });
+
   const [title, setTitle] = useState(initialData?.title || "");
   const [date, setDate] = useState(initialData?.date || "");
   const [time, setTime] = useState(initialData?.time || "");
@@ -54,10 +72,15 @@ const AddSchedulingForm = ({
   const [searchTerm, setSearchTerm] = useState("");
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const isEditing = Boolean(initialData);
 
-  const filteredClients = MOCK_CLIENTS.filter((client) =>
-    client.name.toLowerCase().includes(searchTerm.toLowerCase()),
-  ).sort((a, b) => a.name.localeCompare(b.name));
+  const filteredClients = useMemo(() => {
+    return clients
+      .filter((client) =>
+        client.name.toLowerCase().includes(searchTerm.toLowerCase()),
+      )
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }, [searchTerm, clients]);
 
   useEffect(() => {
     if (inputRef.current) inputRef.current.focus();
@@ -87,7 +110,6 @@ const AddSchedulingForm = ({
     const dayName = dayNames[selectedDate.getDay()];
 
     const configDay = businessHours.find((h) => h.dayweek === dayName);
-
     if (!configDay || !configDay.open || !configDay.close) return [];
 
     const slots: string[] = [];
@@ -111,7 +133,7 @@ const AddSchedulingForm = ({
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const selectedClient = MOCK_CLIENTS.find((c) => c.id === Number(clientId));
+    const selectedClient = clients.find((c) => c.id === Number(clientId));
 
     const eventData: EventData = {
       id: initialData?.id || uuidv4(),
@@ -131,18 +153,26 @@ const AddSchedulingForm = ({
     <form onSubmit={handleSubmit} className="space-y-6">
       <FieldGroup className="space-y-4">
         <Field>
-          <FieldLabel htmlFor="client">Cliente</FieldLabel>
+          <FieldLabel
+            htmlFor="client"
+            className="flex items-center gap-2 text-foreground"
+          >
+            Cliente{" "}
+            {isEditing && <Lock className="w-3 h-3 text-muted-foreground" />}
+          </FieldLabel>
           <Select
             onValueChange={(value) => setClientId(value)}
             value={clientId}
             required
+            disabled={isEditing}
           >
-            <SelectTrigger className="w-full bg-transparent border-input text-foreground overflow-hidden">
+            <SelectTrigger
+              className={`w-full bg-transparent border-input text-foreground overflow-hidden ${isEditing ? "opacity-70" : ""}`}
+            >
               <SelectValue placeholder="Selecione um cliente">
-                {clientId &&
-                MOCK_CLIENTS.find((c) => c.id.toString() === clientId)
+                {clientId && clients.find((c) => c.id.toString() === clientId)
                   ? (() => {
-                      const c = MOCK_CLIENTS.find(
+                      const c = clients.find(
                         (c) => c.id.toString() === clientId,
                       )!;
                       const gName =
@@ -157,14 +187,14 @@ const AddSchedulingForm = ({
             <SelectContent
               position="popper"
               sideOffset={4}
-              className="w-(--radix-select-trigger-width) min-w-[320px] bg-popover"
+              className="w-(--radix-select-trigger-width) min-w-[320px] bg-popover z-110"
             >
               <div className="flex items-center border-b px-3 pb-2 pt-1">
                 <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
                 <input
                   ref={inputRef}
                   placeholder="Pesquisar cliente..."
-                  className="flex h-8 w-full bg-transparent py-3 text-sm outline-none"
+                  className="flex h-8 w-full bg-transparent py-3 text-sm outline-none text-foreground"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   onKeyDown={(e) => e.stopPropagation()}
@@ -190,19 +220,24 @@ const AddSchedulingForm = ({
         </Field>
 
         <Field>
-          <FieldLabel htmlFor="title">Título do Serviço</FieldLabel>
+          <FieldLabel htmlFor="title" className="text-foreground">
+            Título do Serviço
+          </FieldLabel>
           <Input
             id="title"
             placeholder="Ex: Corte de Cabelo"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
+            className="bg-transparent text-foreground"
           />
         </Field>
 
         <div className="grid grid-cols-2 gap-4">
           <Field>
-            <FieldLabel htmlFor="date">Data</FieldLabel>
+            <FieldLabel htmlFor="date" className="text-foreground">
+              Data
+            </FieldLabel>
             <Input
               id="date"
               type="date"
@@ -212,18 +247,21 @@ const AddSchedulingForm = ({
                 setTime("");
               }}
               required
+              className="bg-transparent text-foreground"
             />
           </Field>
 
           <Field>
-            <FieldLabel htmlFor="time">Horário</FieldLabel>
+            <FieldLabel htmlFor="time" className="text-foreground">
+              Horário
+            </FieldLabel>
             <Select
               onValueChange={(value) => setTime(value)}
               value={time}
               disabled={availableSlots.length === 0}
               required
             >
-              <SelectTrigger>
+              <SelectTrigger className="bg-transparent text-foreground">
                 <SelectValue
                   placeholder={
                     !date
@@ -236,7 +274,7 @@ const AddSchedulingForm = ({
               </SelectTrigger>
               <SelectContent
                 position="popper"
-                className="max-h-60 overflow-y-auto"
+                className="max-h-60 overflow-y-auto z-110 bg-popover text-foreground"
               >
                 {availableSlots.map((slot) => (
                   <SelectItem key={slot} value={slot}>
@@ -249,8 +287,12 @@ const AddSchedulingForm = ({
         </div>
       </FieldGroup>
 
-      <Button type="submit" className="w-full bg-primary" disabled={!time}>
-        {initialData ? "Salvar Alterações" : "Confirmar Agendamento"}
+      <Button
+        type="submit"
+        className="w-full bg-primary text-primary-foreground"
+        disabled={!time}
+      >
+        {isEditing ? "Salvar Alterações" : "Confirmar Agendamento"}
       </Button>
     </form>
   );

@@ -34,7 +34,6 @@ const ClientForm = ({ onSuccess, initialData }: ClientFormProps) => {
     e.preventDefault();
 
     const clientData: Clients = {
-      // Se for novo, gera um ID baseado no timestamp para evitar duplicatas do random
       id: initialData?.id || Date.now(),
       name,
       email,
@@ -51,7 +50,7 @@ const ClientForm = ({ onSuccess, initialData }: ClientFormProps) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <FieldGroup className="space-y-4 text-foreground">
+      <FieldGroup className="space-y-4 text-foreground text-left">
         <Field>
           <FieldLabel htmlFor="name">Nome Completo</FieldLabel>
           <Input
@@ -60,6 +59,7 @@ const ClientForm = ({ onSuccess, initialData }: ClientFormProps) => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
+            className="bg-transparent"
           />
         </Field>
 
@@ -73,7 +73,8 @@ const ClientForm = ({ onSuccess, initialData }: ClientFormProps) => {
               >
                 <SelectValue placeholder="Selecione" />
               </SelectTrigger>
-              <SelectContent className="z-110 bg-popover">
+              {/* Z-index alto para garantir que o menu apareça à frente do modal */}
+              <SelectContent className="z-110 bg-popover text-popover-foreground">
                 {DATA_GENDER.map((g) => (
                   <SelectItem key={g.id} value={g.id.toString()}>
                     {g.name}
@@ -88,7 +89,7 @@ const ClientForm = ({ onSuccess, initialData }: ClientFormProps) => {
             <Input
               id="birth"
               type="date"
-              className="bg-transparent"
+              className="bg-transparent block"
               value={birth}
               onChange={(e) => setBirth(e.target.value)}
               required
@@ -105,6 +106,7 @@ const ClientForm = ({ onSuccess, initialData }: ClientFormProps) => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            className="bg-transparent"
           />
         </Field>
 
@@ -117,13 +119,14 @@ const ClientForm = ({ onSuccess, initialData }: ClientFormProps) => {
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             required
+            className="bg-transparent"
           />
         </Field>
       </FieldGroup>
 
       <Button
         type="submit"
-        className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+        className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-bold"
       >
         {initialData ? "Salvar Alterações" : "Cadastrar Cliente"}
       </Button>

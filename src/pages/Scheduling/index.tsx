@@ -6,10 +6,10 @@ import { DATA_STATUS } from "@/data/status";
 import { getEnrichedEvents } from "@/lib/events";
 import { Plus } from "lucide-react";
 
-import { DataTable } from "@/components/layout/DataTable";
 import AddSchedulingForm, {
   type EventData,
-} from "@/components/layout/EditEventsPageForm";
+} from "@/components/layout/AddSchedulingForm";
+import { DataTable } from "@/components/layout/DataTable";
 import Header from "@/components/layout/Header";
 import LayoutDefaultDesktop from "@/components/layout/LayoutDefaultDesktop";
 import LoadingWarning from "@/components/layout/LoadingWarning";
@@ -37,11 +37,11 @@ const SchedulingPage = () => {
             localStorage.setItem("events", JSON.stringify(allEvents));
           }
         } catch (error) {
-          console.error("Erro ao carregar dados:", error);
+          console.error("Erro ao carregar agendamentos:", error);
         } finally {
           setLoading(false);
         }
-      }, 1000);
+      }, 800);
     };
     fetchData();
   }, []);
@@ -98,7 +98,7 @@ const SchedulingPage = () => {
       />
 
       {editingEvent && (
-        <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 text-foreground">
+        <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 text-white">
           <div className="bg-background border p-6 rounded-lg w-full max-w-lg shadow-2xl relative">
             <h2 className="text-xl font-bold mb-4">Editar Agendamento</h2>
             <AddSchedulingForm
@@ -126,7 +126,7 @@ const SchedulingPage = () => {
           }
         >
           {(close) => (
-            <div className="bg-background p-6 rounded-lg shadow-xl border w-100 text-foreground">
+            <div className="bg-background p-6 rounded-lg shadow-xl border w-100 text-white">
               <h2 className="text-xl font-bold mb-4">Novo agendamento</h2>
               <AddSchedulingForm
                 onSuccess={(newEvent) => {
