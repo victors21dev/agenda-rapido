@@ -1,37 +1,36 @@
+"use client";
+
 import { useEffect, useState } from "react";
 
 import { DATA_STATUS } from "@/data/status";
 import { getEnrichedEvents } from "@/lib/events";
 
 import { DataTable } from "@/components/layout/DataTable";
+import EventsPageForm, {
+  type EventData,
+} from "@/components/layout/EventsPageForm";
 import Header from "@/components/layout/Header";
 import LayoutDefaultDesktop from "@/components/layout/LayoutDefaultDesktop";
 import LoadingWarning from "@/components/layout/LoadingWarning";
+import { Button } from "@/components/ui/button";
 
-import { type Events, columns } from "./columns";
+import { type Events, type TableMeta, columns } from "./columns";
 
 const EventsPage = () => {
-  // Estado para armazenar eventos
   const [data, setData] = useState<Events[]>([]);
-  // Estado para controle de carregamento (bom para UX de banco de dados)
   const [loading, setLoading] = useState(true);
+  const [editingEvent, setEditingEvent] = useState<Events | null>(null);
 
-  // Quando entra na página, ele simula o carregamento dos dados do banco de dados
   useEffect(() => {
     const fetchData = () => {
       setLoading(true);
-
       setTimeout(() => {
         try {
           const savedEvents = localStorage.getItem("events");
-
           if (savedEvents) {
-            // Se já existem dados
             setData(JSON.parse(savedEvents));
           } else {
-            // Se é a primeira vez, buscamos do Mock e salvamos tudo (IDs 1 a 5)
-            // Aqui passamos todos os status [1, 2, 3] para o storage ter a base completa
-            const allEvents = getEnrichedEvents([1, 2, 3]);
+            const allEvents = getEnrichedEvents([1, 2, 3]) as Events[];
             setData(allEvents);
             localStorage.setItem("events", JSON.stringify(allEvents));
           }
@@ -42,19 +41,18 @@ const EventsPage = () => {
         }
       }, 1000);
     };
-
     fetchData();
   }, []);
-  // Sempre que os dados mudarem (ex: status atualizado), salvamos no localStorage para persistência
+
   useEffect(() => {
     if (!loading) {
       localStorage.setItem("events", JSON.stringify(data));
     }
   }, [data, loading]);
-  // Função para atualizar o status de um evento (ex: de "Agendado" para "Concluído")
-  const updateStatus = (id: number, nextStatus: number) => {
-    setData((prevData) => {
-      return prevData.map((event) => {
+
+  const updateStatus = (id: string | number, nextStatus: number) => {
+    setData((prevData) =>
+      prevData.map((event) => {
         if (event.id === id) {
           const newStatusInfo = DATA_STATUS.find((s) => s.id === nextStatus);
           return {
@@ -64,39 +62,77 @@ const EventsPage = () => {
           };
         }
         return event;
-      });
-    });
+      }),
+    );
   };
-  // Filtra os eventos para mostrar apenas os que estão "Agendados" (3)
+
+  const handleDeleteEvent = (id: string | number) => {
+    if (confirm("Tem certeza que deseja excluir?")) {
+      setData((prev) => prev.filter((item) => item.id !== id));
+    }
+  };
+
+  const handleUpdateEvent = (updatedEvent: EventData) => {
+    setData((prev) =>
+      prev.map((item) =>
+        item.id === updatedEvent.id ? (updatedEvent as Events) : item,
+      ),
+    );
+    setEditingEvent(null);
+  };
+
   const filteredAndSortedData = data
     .filter((event) => event.status === 3)
     .sort((a, b) => {
-      // Compara as datas
       const dateCompare = a.date.localeCompare(b.date);
-
-      // Se a data for a mesma (0), desempata pelo horário
       if (dateCompare === 0) {
         return a.time.localeCompare(b.time);
       }
-
       return dateCompare;
     });
+
   return (
     <LayoutDefaultDesktop>
-      <div>
-        <Header
-          title="Histórico de Eventos"
-          description="Acompanhe aqui todo seu histórico de eventos"
-        />
-      </div>
+      <Header
+        title="Histórico de Eventos"
+        description="Acompanhe aqui todo seu histórico de eventos"
+      />
+
+      {editingEvent && (
+        <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="bg-background border p-6 rounded-lg w-full max-w-lg shadow-2xl relative">
+            <h2 className="text-xl font-bold mb-4">Editar Agendamento</h2>
+
+            <EventsPageForm
+              initialData={editingEvent as unknown as EventData}
+              onSuccess={handleUpdateEvent}
+            />
+
+            <Button
+              variant="outline"
+              className="mt-4 w-full"
+              onClick={() => setEditingEvent(null)}
+            >
+              Cancelar Edição
+            </Button>
+          </div>
+        </div>
+      )}
+
       <div className="container mx-auto">
         {loading ? (
-          <LoadingWarning description="Carregando histórico" />
+          <LoadingWarning description="Carregando histórico..." />
         ) : (
           <DataTable
             columns={columns}
             data={filteredAndSortedData}
-            meta={{ updateStatus }}
+            meta={
+              {
+                updateStatus,
+                onDelete: handleDeleteEvent,
+                onEdit: (event: Events) => setEditingEvent(event),
+              } as TableMeta
+            }
           />
         )}
       </div>

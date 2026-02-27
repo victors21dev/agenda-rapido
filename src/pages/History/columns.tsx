@@ -11,8 +11,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-interface TableMeta {
+export interface TableMeta {
   updateStatus: (id: string | number, nextStatus: number) => void;
+  onEdit: (event: Events) => void;
+  onDelete: (id: string | number) => void;
 }
 
 export type Events = {
@@ -22,8 +24,8 @@ export type Events = {
   date: string;
   time: string;
   client: number;
-  clientName?: string;
-  statusName?: string;
+  clientName: string;
+  statusName: string;
 };
 
 export const columns: ColumnDef<Events>[] = [
@@ -56,7 +58,6 @@ export const columns: ColumnDef<Events>[] = [
       const status = row.original.status;
       const statusName = row.original.statusName;
 
-      // Mapeamento de estilos
       const statusStyles: Record<number, string> = {
         1: "bg-yellow-100 text-yellow-800 border-yellow-200",
         2: "bg-blue-100 text-blue-800 border-blue-200",
@@ -109,8 +110,13 @@ export const columns: ColumnDef<Events>[] = [
                   ? "Marcar como Concluído"
                   : "Status Finalizado"}
             </DropdownMenuItem>
-            <DropdownMenuItem>Editar</DropdownMenuItem>
-            <DropdownMenuItem className="text-destructive">
+            <DropdownMenuItem onClick={() => meta?.onEdit(event)}>
+              Editar
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="text-destructive"
+              onClick={() => meta?.onDelete(event.id)}
+            >
               Apagar
             </DropdownMenuItem>
           </DropdownMenuContent>

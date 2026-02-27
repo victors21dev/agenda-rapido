@@ -1,9 +1,11 @@
+"use client";
+
 import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
 import { DATA_GENDER } from "@/data/gender";
 import { MOCK_CLIENTS } from "@/mocks/clients";
 import { MOCK_HOURS_OPEN_CLOSE } from "@/mocks/time-list-open-close";
-import { Search } from "lucide-react";
+import { Lock, Search } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 
 import { Button } from "@/components/ui/button";
@@ -36,15 +38,12 @@ interface BusinessHour {
   close: string | null;
 }
 
-interface AddSchedulingFormProps {
+interface EventsPageFormProps {
   onSuccess: (newData: EventData) => void;
   initialData?: EventData | null;
 }
 
-const AddSchedulingForm = ({
-  onSuccess,
-  initialData,
-}: AddSchedulingFormProps) => {
+const EventsPageForm = ({ onSuccess, initialData }: EventsPageFormProps) => {
   const [title, setTitle] = useState(initialData?.title || "");
   const [date, setDate] = useState(initialData?.date || "");
   const [time, setTime] = useState(initialData?.time || "");
@@ -54,6 +53,8 @@ const AddSchedulingForm = ({
   const [searchTerm, setSearchTerm] = useState("");
 
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const isEditing = Boolean(initialData);
 
   const filteredClients = MOCK_CLIENTS.filter((client) =>
     client.name.toLowerCase().includes(searchTerm.toLowerCase()),
@@ -87,7 +88,6 @@ const AddSchedulingForm = ({
     const dayName = dayNames[selectedDate.getDay()];
 
     const configDay = businessHours.find((h) => h.dayweek === dayName);
-
     if (!configDay || !configDay.open || !configDay.close) return [];
 
     const slots: string[] = [];
@@ -131,13 +131,19 @@ const AddSchedulingForm = ({
     <form onSubmit={handleSubmit} className="space-y-6">
       <FieldGroup className="space-y-4">
         <Field>
-          <FieldLabel htmlFor="client">Cliente</FieldLabel>
+          <FieldLabel htmlFor="client" className="flex items-center gap-2">
+            Cliente{" "}
+            {isEditing && <Lock className="w-3 h-3 text-muted-foreground" />}
+          </FieldLabel>
           <Select
             onValueChange={(value) => setClientId(value)}
             value={clientId}
             required
+            disabled={isEditing}
           >
-            <SelectTrigger className="w-full bg-transparent border-input text-foreground overflow-hidden">
+            <SelectTrigger
+              className={`w-full bg-transparent border-input text-foreground overflow-hidden ${isEditing ? "opacity-70 cursor-not-allowed" : ""}`}
+            >
               <SelectValue placeholder="Selecione um cliente">
                 {clientId &&
                 MOCK_CLIENTS.find((c) => c.id.toString() === clientId)
@@ -157,7 +163,7 @@ const AddSchedulingForm = ({
             <SelectContent
               position="popper"
               sideOffset={4}
-              className="w-(--radix-select-trigger-width) min-w-[320px] bg-popover"
+              className="w-(--radix-select-trigger-width) min-w-[320px] bg-popover z-110"
             >
               <div className="flex items-center border-b px-3 pb-2 pt-1">
                 <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
@@ -179,7 +185,7 @@ const AddSchedulingForm = ({
                   const [year, month, day] = client.birth.split("-");
                   return (
                     <SelectItem key={client.id} value={client.id.toString()}>
-                      {client.name} | {genderName} | {day}/{month}/
+                      {client.name} | {genderName} | {day}/${month}/
                       {year.slice(-2)}
                     </SelectItem>
                   );
@@ -236,7 +242,7 @@ const AddSchedulingForm = ({
               </SelectTrigger>
               <SelectContent
                 position="popper"
-                className="max-h-60 overflow-y-auto"
+                className="max-h-60 overflow-y-auto z-110"
               >
                 {availableSlots.map((slot) => (
                   <SelectItem key={slot} value={slot}>
@@ -250,10 +256,10 @@ const AddSchedulingForm = ({
       </FieldGroup>
 
       <Button type="submit" className="w-full bg-primary" disabled={!time}>
-        {initialData ? "Salvar Alterações" : "Confirmar Agendamento"}
+        {isEditing ? "Salvar Alterações" : "Confirmar Agendamento"}
       </Button>
     </form>
   );
 };
 
-export default AddSchedulingForm;
+export default EventsPageForm;
