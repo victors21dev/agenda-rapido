@@ -1,20 +1,20 @@
-import {
-  Calendar,
-  CalendarClock,
-  CalendarRange,
-  Clock,
-  UserPlus,
-} from "lucide-react";
+import { Calendar, CalendarClock, Clock, UserPlus } from "lucide-react";
 
 import ItemSideBar from "./ItemSidebar";
 
 const Sidebar = () => {
   return (
-    <div className="bg-sidebar h-full border-r-2 border-sidebar-border p-4 gap-4 flex flex-col">
+    <div className="bg-background h-full border-r-2 border-sidebar-border p-4 gap-4 flex flex-col">
       <div className="flex gap-2 items-center">
-        <div className="font-bold text-lg flex gap-2 items-center">
-          <CalendarRange />
-          AGENDA-RÁPIDO
+        <div className="font-bold text-md flex gap-2 items-center text-foreground">
+          <div className="w-10 h-10 bg-primary flex items-center justify-center rounded-full border-2 border-primary-border">
+            <img
+              src="/noun-fast-848423.svg"
+              alt="Ícone Rápido"
+              className="w-6 h-6 invert"
+            />
+          </div>
+          Agenda Rápido
         </div>
       </div>
       <hr />
