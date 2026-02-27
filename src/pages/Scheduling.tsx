@@ -1,11 +1,11 @@
-import InfoTopPage from "@/components/layout/InfoTopPage";
+import Header from "@/components/layout/Header";
 import LayoutDefaultDesktop from "@/components/layout/LayoutDefaultDesktop";
 
 const SchedulingPage = () => {
   return (
     <LayoutDefaultDesktop>
       <div>
-        <InfoTopPage
+        <Header
           title="Agendamento"
           description="Página de agendamento de serviços"
         />
