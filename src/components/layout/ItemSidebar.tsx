@@ -19,7 +19,7 @@ const ItemSideBar = ({
   return (
     <Button
       asChild
-      variant={active ? "outline" : "ghost"}
+      variant={active ? "default" : "ghost"}
       className={"flex items-center gap-4 py-6 w-full justify-start rounded-xl"}
     >
       <NavLink to={redirectPath}>
