@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { AnimatePresence, motion } from "framer-motion";
@@ -16,6 +16,21 @@ const Modal = ({ trigger, children }: ModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const close = () => setIsOpen(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      // Quando o modal estiver aberto, desabilita o scroll do body
+      document.body.style.overflow = "hidden";
+    } else {
+      // Quando o modal estiver fechado, reabilita o scroll do body
+      document.body.style.overflow = "unset";
+    }
+
+    // Cleanup para garantir que o scroll volte se o componente desmontar
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
 
   return (
     <>
