@@ -16,7 +16,7 @@ const ClientsPage = () => {
           description="Página para cadastro de clientes e gerenciamento de informações"
         />
       </div>
-      <div className="container mx-auto py-10">
+      <div className="container mx-auto">
         <DataTable columns={columns} data={data} />
       </div>
     </LayoutDefaultDesktop>

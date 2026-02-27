@@ -17,7 +17,7 @@ const EventsPage = () => {
           description="Acompanhe aqui todo seu histórico de eventos"
         />
       </div>
-      <div className="container mx-auto py-10">
+      <div className="container mx-auto">
         <DataTable columns={columns} data={data} />
       </div>
     </LayoutDefaultDesktop>
