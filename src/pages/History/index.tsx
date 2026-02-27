@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { DATA_STATUS } from "@/data/status";
 import { getEnrichedEvents } from "@/lib/events";
 
 import { DataTable } from "@/components/layout/DataTable";
@@ -14,6 +15,31 @@ const EventsPage = () => {
   const [data, setData] = useState<Events[]>([]);
   // Estado para controle de carregamento (bom para UX de banco de dados)
   const [loading, setLoading] = useState(true);
+
+  // Função para atualizar o status de um evento, que será passada para a tabela via meta
+  const updateStatus = (id: number, nextStatus: number) => {
+    setData((prevData) => {
+      // Mapeia os dados existentes
+      const updated = prevData.map((event) => {
+        if (event.id === id) {
+          // Busca o novo nome do status baseado no ID
+          const newStatusInfo = DATA_STATUS.find((s) => s.id === nextStatus);
+
+          return {
+            ...event,
+            status: nextStatus,
+            statusName: newStatusInfo ? newStatusInfo.name : event.statusName,
+          };
+        }
+        return event;
+      });
+
+      // Filtra para manter apenas 1 e 2 na página de agendamento
+      return updated.filter(
+        (event) => event.status === 1 || event.status === 2,
+      );
+    });
+  };
 
   useEffect(() => {
     const fetchData = () => {
@@ -46,7 +72,7 @@ const EventsPage = () => {
         {loading ? (
           <LoadingWarning description="Carregando histórico" />
         ) : (
-          <DataTable columns={columns} data={data} />
+          <DataTable columns={columns} data={data} meta={{ updateStatus }} />
         )}
       </div>
     </LayoutDefaultDesktop>

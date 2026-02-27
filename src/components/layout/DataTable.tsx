@@ -14,20 +14,26 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+interface TableMeta {
+  updateStatus: (id: number, nextStatus: number) => void;
+}
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  meta?: TableMeta;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  meta,
 }: DataTableProps<TData, TValue>) {
   // eslint-disable-next-line react-hooks/incompatible-library
-  const table = useReactTable({
+  const table = useReactTable<TData>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    meta,
   });
 
   return (
