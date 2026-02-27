@@ -8,7 +8,7 @@ import { getEnrichedEvents } from "@/lib/events";
 import { DataTable } from "@/components/layout/DataTable";
 import EventsPageForm, {
   type EventData,
-} from "@/components/layout/EventsPageForm";
+} from "@/components/layout/EditEventsPageForm";
 import Header from "@/components/layout/Header";
 import LayoutDefaultDesktop from "@/components/layout/LayoutDefaultDesktop";
 import LoadingWarning from "@/components/layout/LoadingWarning";
