@@ -7,6 +7,8 @@ export type Clients = {
   phone: string;
   email: string;
   gender: number;
+  genderName?: string;
+  createdAt: string;
 };
 
 export const columns: ColumnDef<Clients>[] = [
@@ -19,12 +21,21 @@ export const columns: ColumnDef<Clients>[] = [
     header: "Nome",
   },
   {
-    accessorKey: "gender",
+    accessorKey: "genderName",
     header: "Gênero",
   },
   {
     accessorKey: "birth",
     header: "Data de Nascimento",
+    cell: ({ row }) => {
+      const dateValue = row.getValue("birth") as string;
+
+      if (!dateValue) return "-";
+
+      const [year, month, day] = dateValue.split("-");
+
+      return `${day}/${month}/${year}`;
+    },
   },
   {
     accessorKey: "phone",
@@ -33,5 +44,19 @@ export const columns: ColumnDef<Clients>[] = [
   {
     accessorKey: "email",
     header: "Email",
+  },
+  {
+    accessorKey: "createdAt",
+    header: "Data de Criação",
+    cell: ({ row }) => {
+      const dateValue = row.getValue("createdAt") as string;
+
+      if (!dateValue) return "-";
+
+      const dateOnly = dateValue.split("T")[0];
+      const [year, month, day] = dateOnly.split("-");
+
+      return `${day}/${month}/${year}`;
+    },
   },
 ];

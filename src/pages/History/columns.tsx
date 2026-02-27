@@ -19,19 +19,25 @@ export const columns: ColumnDef<Events>[] = [
     header: "Título",
   },
   {
-    accessorKey: "client",
+    accessorKey: "clientName",
     header: "Cliente",
   },
   {
     accessorKey: "date",
     header: "Data",
+    cell: ({ row }) => {
+      const dateValue = row.getValue("date") as string;
+      const [year, month, day] = dateValue.split("-");
+
+      return `${day}/${month}/${year}`;
+    },
   },
   {
     accessorKey: "time",
     header: "Hora",
   },
   {
-    accessorKey: "status",
+    accessorKey: "statusName",
     header: "Status",
   },
 ];

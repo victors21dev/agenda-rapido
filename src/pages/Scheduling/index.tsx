@@ -1,22 +1,14 @@
+import { getEnrichedEvents } from "@/lib/events";
+
 import { DataTable } from "@/components/layout/DataTable";
 import Header from "@/components/layout/Header";
 import LayoutDefaultDesktop from "@/components/layout/LayoutDefaultDesktop";
 
-import { type Payment, columns } from "./columns";
-
-function getData(): Payment[] {
-  return [
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },
-  ];
-}
+import { type Events, columns } from "../History/columns";
 
 const SchedulingPage = () => {
-  const data = getData();
+  // Trazer apenas os eventos com status 1 e 2 (agendado e em andamento) para o agendamento
+  const data: Events[] = getEnrichedEvents([1, 2]);
 
   return (
     <LayoutDefaultDesktop>

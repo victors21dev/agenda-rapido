@@ -1,4 +1,4 @@
-import { MOCK_CLIENTS } from "@/mocks/clients";
+import { getEnrichedClients } from "@/lib/clients";
 
 import { DataTable } from "@/components/layout/DataTable";
 import Header from "@/components/layout/Header";
@@ -6,12 +6,8 @@ import LayoutDefaultDesktop from "@/components/layout/LayoutDefaultDesktop";
 
 import { type Clients, columns } from "./columns";
 
-function getData(): Clients[] {
-  return MOCK_CLIENTS;
-}
-
 const ClientsPage = () => {
-  const data = getData();
+  const data: Clients[] = getEnrichedClients();
   return (
     <LayoutDefaultDesktop>
       <div>
