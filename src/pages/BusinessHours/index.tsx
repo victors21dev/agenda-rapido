@@ -59,7 +59,7 @@ const BusinessHoursPage = () => {
           <LoadingWarning description="Carregando horários de funcionamento..." />
         ) : (
           <>
-            <div className="grid grid-cols-3 gap-4 mb-2 text-xs font-bold uppercase text-slate-500 border-b pb-2">
+            <div className="grid grid-cols-3 gap-4 mb-2 text-xs font-bold uppercase text-primary border-b pb-2">
               <span>Dia</span>
               <span>Abertura</span>
               <span>Fechamento</span>
@@ -70,7 +70,7 @@ const BusinessHoursPage = () => {
                 key={item.id}
                 className="grid grid-cols-3 items-center gap-4"
               >
-                <div className="text-sm font-medium text-slate-700">
+                <div className="text-sm font-medium text-muted-foreground">
                   {item.dayweek.split("-")[0]}
                 </div>
 
